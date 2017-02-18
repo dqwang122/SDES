@@ -1,7 +1,5 @@
 # SDES
 SDES: RSA + 6DES
-<div style="text-align:right">14307130360</div>
-<div style="text-align:right">王丹青</div>
 [toc]
 
 ###项目目录
