@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8"> 
+   <title>传送SDES加密算法</title>
+   
+   <!-- 新 Bootstrap 核心 CSS 文件 -->
+   <link href="Bootstrap/css/bootstrap.css" rel="stylesheet">   
+   <link href="Bootstrap/css/bootstrap.min.css" rel="stylesheet">     
+
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="Bootstrap/js/jquery.min.js"></script>
+
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="Bootstrap/js/bootstrap.js"></script>
+	<script src="Bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap fileinput 插件 -->
+	<link href="Bootstrap/css/fileinput.min.css" rel="stylesheet">
+	<script src="Bootstrap/js/fileinput.min.js"></script>
+	<script src="Bootstrap/js/fileinput_locale_zh.js"></script>
+	
+	<script src="DES.js"></script>
+	
+</head>
+<body>
+
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-12 column">
+				<div class="page-header">
+					<h1>传送SDES加密算法 <small>RSA + 6轮DES</small></h1>
+				</div>
+				
+				<h4><u>使用说明</u></h4>
+				<dl>
+				<ul>
+					<li><p>
+						<dt>实现功能</dt>
+						<ul>
+							<dd style="font-family:Microsoft YaHei"><li>&nbsp使用DES加密数据文本</li></dd>
+							<dd style="font-family:Microsoft YaHei"><li>&nbsp使用RSA加密DES所需64位密钥</li></dd>
+							<dd style="font-family:Microsoft YaHei"><li>&nbspRSA中每次随机生成密钥</li></dd>
+						</ul>
+					</p></li>
+					<li><p>
+						<dt>注意事项</dt>
+						<ul>
+						<dd style="font-family:Microsoft YaHei"><li>&nbsp模拟发送方A和接收方B通信</li></dd>
+						<dd style="font-family:Microsoft YaHei"><li>&nbsp发送方A传输的数据自动显示在接收方B对应的文本框中</li></dd>
+						<dd style="font-family:Microsoft YaHei"><li>&nbspDES加密的数据和解密之后的数据提供文本下载</li></dd>
+						</ul>
+					</p></li>
+				</ul>
+				</dl>
+				
+				
+				<div style="height:10px"></div>
+				<div class="panel-group" id="panel-48590">
+					<!-- sender A -->
+					<div class="panel panel-default">
+						<div style="background-color:#d2e9ff" class="panel-heading" >
+						 	<a class="panel-title" href="#panel-element-49020" data-toggle="collapse" data-parent="#panel-48590">发送方A</a>
+						</div>
+						<div class="panel-collapse collapse" id="panel-element-49020">
+							<div class="panel-body">
+								<!-- /. RSA -->
+								<div class="col-md-12">				
+									<div class="panel panel-success">
+										<div class="panel-heading">
+											DES密钥加密 —— RSA
+										</div>
+										<!-- /.panel-heading -->
+										<div class="panel-body">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>公钥e</label>
+													<textarea class="form-control" id="publickey"></textarea>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>模数n</label>
+													<textarea class="form-control" id = "module_1"></textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<button class="btn btn-success" rows="2" type="button" onclick="RSA_userKey();">获取用户B的公钥</button>
+											</div>
+											<div> &nbsp </div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>明文：DES密钥</label>
+													<textarea class="form-control" id = "cl_DESkey"></textarea>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>密文：加密结果</label>
+													<textarea class="form-control" id = "ci_DESkey"></textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<button class="btn btn-success" rows="2" type="button" onclick="RSA_encrypt();">RSA加密</button>
+											</div>
+										</div>
+										<!-- /.panel body-->
+									</div>
+									<!-- /.panel -->
+								</div>
+								<!-- /.col-md-12 -->
+								<div> &nbsp </div>
+								<!-- /. DES -->
+								<div class="col-md-12">				
+									<div class="panel panel-success">
+										<div class="panel-heading">
+											传输文本加密 —— DES
+										</div>
+										<!-- /.panel-heading -->
+										<div class="panel-body">
+											<div class="col-md-12">
+												<div class="form-group">
+													<form class="form-horizontal" role="form" >
+														<label for="clearField">明文:数据内容</label>
+														<input id="clearfile" type="file" style="display:none">
+														<div class="input-append">
+															<input id="photoCover-m" type="text" style="height:30px;">
+															<a class="btn btn-success" onclick="$('input[id=clearfile]').click();">浏览</a>
+														</div>
+													</form>
+													<div style="height:5px"></div>
+													<textarea class="form-control" id="cl_DES"></textarea>
+												</div>
+											</div>
+											<!-- /.col-md-12-->
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="clearField">密文:加密结果</label>
+													<textarea class="form-control" id="ci_DES"></textarea>
+												</div>
+											</div>
+											<!-- /.col-md-12-->
+											<div class="col-md-12">
+												<button class="btn btn-success" rows="2" type="button" onclick="show_cipher();">DES加密</button>
+												<a class="btn btn-success" id="test"  href="#" onclick="clickDownloadcipher(this)" download="cipherfile.txt" >下载密文文本</a>
+											</div>
+											<!-- /.col-md-12-->
+										</div>
+										<!-- /.panel body-->
+									</div>
+									<!-- /.panel -->
+								</div>
+								<!-- /.col-md-12 -->
+							</div>
+							<!-- end of panel-body-->
+						</div>
+						<!-- end of panel-collapse-->
+					</div>
+					<!-- end of panel-default -->
+					
+					<div style="height:5px"></div>
+					
+					<!-- Receiver B -->
+					<div class="panel panel-default">
+						<div style="background-color:#d2e9ff" class="panel-heading">
+							<a class="panel-title collapsed" href="#panel-element-253081" data-toggle="collapse" data-parent="#panel-48590">接收方B</a>
+						</div>
+						<div class="panel-collapse collapse" id="panel-element-253081">
+							<div class="panel-body">
+								<!-- /. RSA -->
+								<div class="col-md-12">				
+									<div class="panel panel-success">
+										<div class="panel-heading">
+											DES密钥解密 —— RSA
+										</div>
+										<!-- /.panel-heading -->
+										<div class="panel-body">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>私钥d</label>
+													<textarea class="form-control" id="privatekey"></textarea>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>模数n</label>
+													<textarea class="form-control" id = "module_2"></textarea>
+												</div>
+											</div>
+											<div> &nbsp </div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>密文：收到加密后的DES密钥</label>
+													<textarea class="form-control" id = "ci_DESkey2"></textarea>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label>明文：DES密钥解密结果</label>
+													<textarea class="form-control" id = "cl_DESkey2"></textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<button class="btn btn-success" rows="2" type="button" onclick="RSA_decrypt_fast();">RSA快速解密</button>
+												<button class="btn btn-success" rows="2" type="button" onclick="checkRSA();">检验RSA</button>
+											</div>
+										</div>
+										<!-- /.panel body-->
+									</div>
+									<!-- /.panel -->
+								</div>
+								<!-- /.col-md-12 -->
+								<div> &nbsp </div>
+								<!-- /. DES -->
+								<div class="col-md-12">				
+									<div class="panel panel-success">
+										<div class="panel-heading">
+											传输文本解密 —— DES
+										</div>
+										<!-- /.panel-heading -->
+										<div class="panel-body">
+											<div class="col-md-12">
+												<div class="form-group">
+													<form class="form-horizontal" role="form" >
+														<label for="cipherField">密文:数据加密内容</label>
+														<input id="cipherfile" type="file" style="display:none">
+														<div class="input-append">
+															<input id="photoCover-c" type="text" style="height:30px;">
+															<a class="btn btn-success" onclick="$('input[id=cipherfile]').click();">浏览</a>
+														</div>
+													</form>
+													<div style="height:5px"></div>
+													<textarea class="form-control" id="ci_DES2"></textarea>
+												</div>
+											</div>
+											<!-- /.col-md-12-->
+											<div class="col-md-12">
+												<div class="form-group">
+													<label for="clearField">明文:解密结果</label>
+													<div style="height:5px"></div>
+													<textarea class="form-control" id="cl_DES2"></textarea>
+												</div>
+											</div>
+											<!-- /.col-md-12-->
+											<div class="col-md-12">
+												<button class="btn btn-success" rows="2" type="button" onclick="show_clear();">DES解密</button>
+												<button class="btn btn-success" rows="2" type="button" onclick="checkDES();">检验DES</button>
+												<a class="btn btn-success" id="test"  href="#" onclick="clickDownloadclear(this)" download="clearfile.txt" >下载明文文本</a>
+											</div>
+											<!-- /.col-md-12-->
+										</div>
+										<!-- /.panel body-->
+									</div>
+									<!-- /.panel -->
+								</div>
+								<!-- /.col-md-12 -->
+							</div>
+							<!-- end of panel-body-->
+						</div>
+						<!-- end of panel-collapse-->
+					</div>
+					<!-- end of panel-default -->
+					
+				</div>
+				<!-- end of panel-group -->
+			</div>
+			<!-- end of col-md-12 column -->
+		</div>
+		<!-- end of row clearfix -->
+	</div>
+	
+	<script type="text/javascript">
+		$('input[id=clearfile]').change(function() {
+			$('#photoCover-m').val($(this).val());
+		});
+		$('input[id=cipherfile]').change(function() {
+			$('#photoCover-c').val($(this).val());
+		});
+	function checkRSA(){
+		var x = document.getElementById("cl_DESkey").value;
+		var y = document.getElementById("cl_DESkey2").value;
+		if(x == y)
+			alert("RSA is correct!");
+		else
+			alert("RSA is not correct!");
+	}
+	function checkDES(){
+		var x = document.getElementById("cl_DES").value;
+		var y = document.getElementById("cl_DES2").value;
+		if(x == y)
+			alert("DES is correct!");
+		else
+			alert("DES is not correct!");
+	}
+	</script>
+	
+</body>
+	<script src="RSA.js"></script>
+</html>
